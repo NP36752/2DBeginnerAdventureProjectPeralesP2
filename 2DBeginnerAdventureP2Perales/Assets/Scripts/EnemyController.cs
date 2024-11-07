@@ -13,11 +13,14 @@ public class EnemyController : MonoBehaviour
     float timer;
     int direction = 1;
 
+    Animator animator;
 
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         timer = changeTime;
+        animator = GetComponent<Animator>();
+
     }
 
     
@@ -36,14 +39,26 @@ public class EnemyController : MonoBehaviour
         Vector2 position = rigidbody2d.position;
         if (vertical)
         {
-            position.y = position.y + Time.deltaTime * speed;
+            animator.SetFloat("MoveX", 0);
+            animator.SetFloat("MoveY", direction);
+            position.y = position.y + Time.deltaTime * speed * direction;
         }
         else
         {
-            position.x = position.x + Time.deltaTime * speed;
+            animator.SetFloat("MoveX", direction);
+            animator.SetFloat("MoveY", 0);
+            position.x = position.x + Time.deltaTime * speed * direction;
         }
 
 
         rigidbody2d.MovePosition(position);
+    }
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        PlayerControllerFinal player = other.gameObject.GetComponent<PlayerControllerFinal>();
+        if (player != null)
+        {
+            player.ChangeHealth(-1);
+        }
     }
 }
