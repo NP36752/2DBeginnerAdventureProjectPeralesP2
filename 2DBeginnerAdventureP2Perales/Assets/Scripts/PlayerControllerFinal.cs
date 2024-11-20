@@ -63,6 +63,19 @@ public class PlayerControllerFinal : MonoBehaviour
         {
             Launch();
         }
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
+            if(hit.collider != null)
+            {
+                NPC character = hit.collider.GetComponent<NPC>();
+                if(character != null)
+                {
+                    character.DisplayDialogue();
+                }
+            }
+        }
     } 
     
     void FixedUpdate()
@@ -85,7 +98,7 @@ public class PlayerControllerFinal : MonoBehaviour
             invincibleTimer = timeInvincible;
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        Debug.Log(currentHealth + "/" + maxHealth);
+        UIHealthBar.instance.SetValue(currentHealth /(float)maxHealth);
     }
 
     void Launch()
