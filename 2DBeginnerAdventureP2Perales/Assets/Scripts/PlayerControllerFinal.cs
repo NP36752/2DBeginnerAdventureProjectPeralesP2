@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerControllerFinal : MonoBehaviour
 {
@@ -25,13 +26,20 @@ public class PlayerControllerFinal : MonoBehaviour
 
     Animator animator;
     Vector2 lookDirection = new Vector2(1, 0);
-    
+
+    AudioSource audioSource;
+    public AudioClip throwSound;
+    public AudioClip hitSound;
+
 
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
+
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -96,6 +104,7 @@ public class PlayerControllerFinal : MonoBehaviour
             }
             isInvincible = true;
             invincibleTimer = timeInvincible;
+            PlaySound(hitSound);
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         UIHealthBar.instance.SetValue(currentHealth /(float)maxHealth);
@@ -109,5 +118,11 @@ public class PlayerControllerFinal : MonoBehaviour
         Bullet.Launch(lookDirection, 300);
 
         animator.SetTrigger("Launch");
+        PlaySound(throwSound);
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
 }

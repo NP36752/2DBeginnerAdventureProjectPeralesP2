@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealthPickupScript : MonoBehaviour
 {
-   
+    public AudioClip collectedClip;
     void OnTriggerEnter2D(Collider2D other)
     {
         PlayerControllerFinal controller = other.GetComponent<PlayerControllerFinal>();
@@ -14,6 +14,8 @@ public class HealthPickupScript : MonoBehaviour
             {
                 controller.ChangeHealth(1);
                 Destroy(gameObject);
+
+                controller.PlaySound(collectedClip);
             }
        
         }
